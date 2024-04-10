@@ -4,7 +4,7 @@ A demo of how to push an image built by dagger into a container registry, in thi
 
 This repo is not intended to be used as a dagger module because it's so simple, more of an example to copy from.
 
-Example .github/workflows/docker-publish.yaml:
+Example `.github/workflows/docker-publish.yaml`:
 
 ```
 name: 'build-and-push'
