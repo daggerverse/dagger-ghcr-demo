@@ -1,8 +1,8 @@
 # Dagger GitHub Container Registry (ghcr.io) demo
 
-A demo of how to push an image built by dagger into a container registry, in this case github ghcr.io.
+A demo of how to push an image built by dagger into a container registry, in this case GitHub's `ghcr.io`.
 
-Not intended to be used as a dagger module because it's so simple, more of an example to copy from.
+This repo is not intended to be used as a dagger module because it's so simple, more of an example to copy from.
 
 Example .github/workflows/docker-publish.yaml:
 
@@ -79,3 +79,5 @@ func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username
 	return err
 }
 ```
+
+And you can see the resulting published container images: [https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo](https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo)
