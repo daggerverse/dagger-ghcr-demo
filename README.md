@@ -68,7 +68,7 @@ func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container 
 		WithFile("/cow.txt", buildContext.File("cow.txt")).
 		WithExec([]string{"apt", "update"}).
 		WithExec([]string{"apt", "install", "-y", "cowsay"}).
-		WithEntrypoint([]string{"/usr/bin/cowsay", "/cow.txt"})
+		WithEntrypoint([]string{"bash", "-c", "/usr/games/cowsay < /cow.txt"})
 }
 
 // Take the built container and push it
@@ -81,3 +81,18 @@ func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username
 ```
 
 And you can see the resulting published container images: [https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo](https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo)
+
+Run it to see the cow:
+```
+docker run ghcr.io/lukemarsden/dagger-ghcr-demo:latest
+```
+```
+ ____________________
+< How now, brown cow >
+ --------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
