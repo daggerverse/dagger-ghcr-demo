@@ -25,9 +25,9 @@ jobs:
           verb: call
           args: |
             build-and-push \
-            --registry=env:DOCKER_REGISTRY \
-            --image-name=env:DOCKER_IMAGE_NAME\
-            --username=env:DOCKER_USERNAME \
+            --registry=$DOCKER_REGISTRY \
+            --image-name=$DOCKER_IMAGE_NAME \
+            --username=$DOCKER_USERNAME \
             --password=env:DOCKER_PASSWORD
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}
