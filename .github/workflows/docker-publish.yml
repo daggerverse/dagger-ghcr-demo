@@ -1,3 +1,5 @@
+# what to do next: try using push from https://github.com/dagger/dagger-for-github
+
 name: Docker
 
 on:
@@ -24,9 +26,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
 
     steps:
       - name: Checkout repository
