@@ -62,7 +62,7 @@ func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container 
 		WithFile("/cow.txt", buildContext.File("cow.txt")).
 		WithExec([]string{"apt", "update"}).
 		WithExec([]string{"apt", "install", "-y", "cowsay"}).
-		WithEntrypoint([]string{"/usr/bin/cowsay", "/cow.txt"})
+		WithEntrypoint([]string{"/usr/games/cowsay", "/cow.txt"})
 }
 
 // Take the built container and push it
