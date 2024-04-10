@@ -1,16 +1,51 @@
-// A demo of how to
+// A demo of how to push to a container registry, in this case github ghcr.io
 //
-// This module has been generated via dagger init and serves as a reference to
-// basic module structure as you get started with Dagger.
+// Not intended to be used as a dagger module because it's so simple, more of an
+// example to copy from.
 //
-// Two functions have been pre-created. You can modify, delete, or add to them,
-// as needed. They demonstrate usage of arguments and return types using simple
-// echo and grep commands. The functions can be called from the dagger CLI or
-// from one of the SDKs.
+// Example .github/workflows/docker-publish.yaml:
 //
-// The first line in this comment block is a short description line and the
-// rest is a long description with more detail on the module's purpose or usage,
-// if appropriate. All modules should have a short description.
+// ```
+// name: 'build-and-push'
+//
+// on:
+//   push:
+//     branches:
+//     - main
+//
+// jobs:
+//   dagger:
+//     runs-on: ubuntu-latest
+//     permissions:
+//       contents: read
+//       packages: write
+//     steps:
+//       - name: Checkout
+//         uses: actions/checkout@v4
+//
+//       - name: Dagger Build & Push
+//         uses: dagger/dagger-for-github@v5
+//         with:
+//           version: "0.11.0"
+//           verb: call
+//           args: build-and-push --registry=$DOCKER_REGISTRY --image-name=$DOCKER_IMAGE_NAME --username=$DOCKER_USERNAME --password=env:DOCKER_PASSWORD --build-context .
+//         env:
+//           DOCKER_REGISTRY: ghcr.io
+//           DOCKER_IMAGE_NAME: ${{ github.repository }}
+//           DOCKER_USERNAME: ${{ github.actor }}
+//           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+// ```
+//
+// This is how you acquire "packages" write permission, then call the
+// dagger-for-github module with DOCKER_REGISTRY, DOCKER_IMAGE_NAME,
+// DOCKER_USERNAME and DOCKER_PASSWORD set appropriately.
+//
+// Nothing in the dagger module is specific to GHCR, it's just:
+// * Build the container in the usual way with Dagger. Here we make a cowsay
+//   container that says "How now, brown cow", showing how to pass build context
+//   from the filesystem
+// * Use `ctr.WithRegistryAuth(registry, username, password).Publish(ctx, registry+"/"+imageName)`
+//   to publish the container to the ghcr registry.
 
 package main
 
@@ -32,7 +67,6 @@ func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container 
 
 // Take the built container and push it
 func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username string, password *Secret, buildContext *Directory) error {
-	// panic(fmt.Sprintf("REGISTRY --> %s", registry))
 	_, err := m.Build(ctx, buildContext).
 		WithRegistryAuth(registry, username, password).
 		Publish(ctx, registry+"/"+imageName)

@@ -1,19 +1,16 @@
-name: 'ci'
+name: 'build-and-push'
 
 on:
   push:
     branches:
     - main
 
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   dagger:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +22,7 @@ jobs:
           verb: call
           args: build-and-push --registry=$DOCKER_REGISTRY --image-name=$DOCKER_IMAGE_NAME --username=$DOCKER_USERNAME --password=env:DOCKER_PASSWORD --build-context .
         env:
-          DOCKER_REGISTRY: ${{ env.REGISTRY }}
-          DOCKER_IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          DOCKER_REGISTRY: ghcr.io
+          DOCKER_IMAGE_NAME: ${{ github.repository }}
           DOCKER_USERNAME: ${{ github.actor }}
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
