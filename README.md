@@ -37,7 +37,11 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-This is how you acquire "packages" write permission, then call the dagger-for-github module with DOCKER_REGISTRY, DOCKER_IMAGE_NAME, DOCKER_USERNAME and DOCKER_PASSWORD set appropriately.
+This is how you acquire `packages: write` permission, then call the `dagger-for-github` module with `DOCKER_REGISTRY`, `DOCKER_IMAGE_NAME`, `DOCKER_USERNAME` and `DOCKER_PASSWORD` set appropriately.
+
+Copy and edit appropriately :-)
+
+Note: when specifying the args for the dagger module, you have to use `--registry=$DOCKER_REGISTRY` syntax for the non-secrets (regular strings), and `--password=env:DOCKER_PASSWORD` syntax for the secrets. This is because dagger only supports the `env:` syntax for secrets.
 
 Nothing in the dagger module is specific to GHCR, it's just:
 
@@ -47,4 +51,31 @@ Nothing in the dagger module is specific to GHCR, it's just:
 * Use `ctr.WithRegistryAuth(registry, username, password).Publish(ctx, registry+"/"+imageName)`
   to publish the container to the ghcr registry.
 
-Note: when specifying the args for the dagger module, you have to use `--registry=$DOCKER_REGISTRY` syntax for the non-secrets (regular strings), and `--password=env:DOCKER_PASSWORD` syntax for the secrets. This is because dagger only supports the `env:` syntax for secrets.
+Here's the complete [`dagger/main.go`](dagger/main.go):
+```go
+package main
+
+import (
+	"context"
+)
+
+type Cowsay struct{}
+
+// Application specific build logic
+func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container {
+	return dag.Container().
+		From("ubuntu:latest").
+		WithFile("/cow.txt", buildContext.File("cow.txt")).
+		WithExec([]string{"apt", "update"}).
+		WithExec([]string{"apt", "install", "-y", "cowsay"}).
+		WithEntrypoint([]string{"/usr/bin/cowsay", "/cow.txt"})
+}
+
+// Take the built container and push it
+func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username string, password *Secret, buildContext *Directory) error {
+	_, err := m.Build(ctx, buildContext).
+		WithRegistryAuth(registry, username, password).
+		Publish(ctx, registry+"/"+imageName)
+	return err
+}
+```
