@@ -12,10 +12,10 @@ import (
 	"context"
 )
 
-type Cowsay struct{}
+type DaggerGhcrDemo struct{}
 
 // Application specific build logic
-func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container {
+func (m *DaggerGhcrDemo) Build(ctx context.Context, buildContext *Directory) *Container {
 	return dag.Container().
 		From("ubuntu:latest").
 		WithFile("/cow.txt", buildContext.File("cow.txt")).
@@ -25,7 +25,7 @@ func (m *Cowsay) Build(ctx context.Context, buildContext *Directory) *Container 
 }
 
 // Take the built container and push it
-func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username string, password *Secret, buildContext *Directory) error {
+func (m *DaggerGhcrDemo) BuildAndPush(ctx context.Context, registry, imageName, username string, password *Secret, buildContext *Directory) error {
 	_, err := m.Build(ctx, buildContext).
 		WithRegistryAuth(registry, username, password).
 		Publish(ctx, registry+"/"+imageName)
