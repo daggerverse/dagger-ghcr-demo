@@ -1,3 +1,5 @@
+// Demo of Dagger pushing to GitHub Container Registry (ghcr.io) from GitHub Actions
+//
 // A demo of how to push to a container registry, in this case github ghcr.io
 //
 // Not intended to be used as a dagger module because it's so simple, more of an
