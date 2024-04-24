@@ -7,7 +7,7 @@
 // more of an example to copy from.
 //
 // For GitHub Actions yaml and dagger go code to copy, see the README at
-// https://github.com/lukemarsden/dagger-ghcr-demo
+// https://github.com/daggerverse/dagger-ghcr-demo
 
 package main
 

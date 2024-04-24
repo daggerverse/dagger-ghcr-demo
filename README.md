@@ -80,11 +80,11 @@ func (m *Cowsay) BuildAndPush(ctx context.Context, registry, imageName, username
 }
 ```
 
-And you can see the resulting published container images: [https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo](https://github.com/lukemarsden/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo)
+And you can see the resulting published container images: [https://github.com/daggerverse/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo](https://github.com/daggerverse/dagger-ghcr-demo/pkgs/container/dagger-ghcr-demo)
 
 Run it to see the cow:
 ```
-docker run ghcr.io/lukemarsden/dagger-ghcr-demo:latest
+docker run ghcr.io/daggerverse/dagger-ghcr-demo:latest
 ```
 ```
  ____________________
